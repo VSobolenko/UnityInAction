@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using InteractiveElements.NativeMVC;
+using UnityEngine;
+
+public class DeviceTrigger : MonoBehaviour
+{
+    [SerializeField] private GameObject[] targets;
+    public bool requireKey;
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (Managers.Inventory == null)
+            return;
+
+        if (requireKey && Managers.Inventory.equippedItem != "key")
+        {
+            return;
+        }
+        foreach (var target in targets)
+        {
+            target.SendMessage("Activate");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        foreach (var target in targets)
+        {
+            target.SendMessage("Deactivate");
+        }
+    }
+}
